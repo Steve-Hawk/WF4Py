@@ -167,13 +167,15 @@ class IMRPhenomXAS(WaveFormModel):
         
         Acoloc = np.array([A0i, A1i, A2i, A3i, A4i]).transpose(2,0,1)
         bcoloc = np.array([CollocationValuesPhaseRD0, CollocationValuesPhaseRD1, CollocationValuesPhaseRD2, CollocationValuesPhaseRD3, CollocationValuesPhaseRD4]).T
-        
-        coeffscoloc = np.linalg.solve(Acoloc, bcoloc)
-        c0coloc  = coeffscoloc[:,0]
-        c1coloc  = coeffscoloc[:,1]
-        c2coloc  = coeffscoloc[:,2]
-        c4coloc  = coeffscoloc[:,3]
-        cRDcoloc = coeffscoloc[:,4]
+        #print(Acoloc, bcoloc)
+        #print(Acoloc.shape, bcoloc[...,None].shape)
+        coeffscoloc = np.linalg.solve(Acoloc, bcoloc[...,None])
+
+        c0coloc  = coeffscoloc[:,0, 0]
+        c1coloc  = coeffscoloc[:,1, 0]
+        c2coloc  = coeffscoloc[:,2, 0]
+        c4coloc  = coeffscoloc[:,3, 0]
+        cRDcoloc = coeffscoloc[:,4, 0]
         cLcoloc  = -(dphase0 * cRDcoloc)
         phaseRD  = CollocationValuesPhaseRD0
         
@@ -205,12 +207,12 @@ class IMRPhenomXAS(WaveFormModel):
 
             Acoloc = np.array([A0i, A1i, A2i, A3i]).transpose(2,0,1)#.T
             bcoloc = np.array([CollocationValuesPhaseIns0, CollocationValuesPhaseIns1, CollocationValuesPhaseIns2, CollocationValuesPhaseIns3]).T
-
-            coeffscoloc = np.linalg.solve(Acoloc, bcoloc)
-            a0coloc  = coeffscoloc[:,0]
-            a1coloc  = coeffscoloc[:,1]
-            a2coloc  = coeffscoloc[:,2]
-            a3coloc  = coeffscoloc[:,3]
+            #print(Acoloc.shape, bcoloc.shape, bcoloc[..., None].shape)
+            coeffscoloc = np.linalg.solve(Acoloc, bcoloc[..., None])
+            a0coloc  = coeffscoloc[:,0, 0]
+            a1coloc  = coeffscoloc[:,1, 0]
+            a2coloc  = coeffscoloc[:,2, 0]
+            a3coloc  = coeffscoloc[:,3, 0]
             a4coloc  = np.zeros_like(a3coloc)
         
         elif self.InsPhaseVersion == 114:
@@ -237,11 +239,11 @@ class IMRPhenomXAS(WaveFormModel):
             Acoloc = np.array([A0i, A1i, A2i, A3i]).transpose(2,0,1)
             bcoloc = np.array([CollocationValuesPhaseIns0, CollocationValuesPhaseIns1, CollocationValuesPhaseIns2, CollocationValuesPhaseIns3]).T
 
-            coeffscoloc = np.linalg.solve(Acoloc, bcoloc)
-            a0coloc  = coeffscoloc[:,0]
-            a1coloc  = coeffscoloc[:,1]
-            a2coloc  = coeffscoloc[:,2]
-            a3coloc  = coeffscoloc[:,3]
+            coeffscoloc = np.linalg.solve(Acoloc, bcoloc[..., None])
+            a0coloc  = coeffscoloc[:,0,0]
+            a1coloc  = coeffscoloc[:,1,0]
+            a2coloc  = coeffscoloc[:,2,0]
+            a3coloc  = coeffscoloc[:,3,0]
             a4coloc  = np.zeros_like(a3coloc)
             
         elif self.InsPhaseVersion == 105:
@@ -272,12 +274,12 @@ class IMRPhenomXAS(WaveFormModel):
             Acoloc = np.array([A0i, A1i, A2i, A3i, A4i]).transpose(2,0,1)
             bcoloc = np.array([CollocationValuesPhaseIns0, CollocationValuesPhaseIns1, CollocationValuesPhaseIns2, CollocationValuesPhaseIns3, CollocationValuesPhaseIns4]).T
         
-            coeffscoloc = np.linalg.solve(Acoloc, bcoloc)
-            a0coloc  = coeffscoloc[:,0]
-            a1coloc  = coeffscoloc[:,1]
-            a2coloc  = coeffscoloc[:,2]
-            a3coloc  = coeffscoloc[:,3]
-            a4coloc  = coeffscoloc[:,4]
+            coeffscoloc = np.linalg.solve(Acoloc, bcoloc[...,None])
+            a0coloc  = coeffscoloc[:,0,0]
+            a1coloc  = coeffscoloc[:,1,0]
+            a2coloc  = coeffscoloc[:,2,0]
+            a3coloc  = coeffscoloc[:,3,0]
+            a4coloc  = coeffscoloc[:,4,0]
             
         elif self.InsPhaseVersion == 115:
             
@@ -307,12 +309,12 @@ class IMRPhenomXAS(WaveFormModel):
             Acoloc = np.array([A0i, A1i, A2i, A3i, A4i]).transpose(2,0,1)
             bcoloc = np.array([CollocationValuesPhaseIns0, CollocationValuesPhaseIns1, CollocationValuesPhaseIns2, CollocationValuesPhaseIns3, CollocationValuesPhaseIns4]).T
         
-            coeffscoloc = np.linalg.solve(Acoloc, bcoloc)
-            a0coloc  = coeffscoloc[:,0]
-            a1coloc  = coeffscoloc[:,1]
-            a2coloc  = coeffscoloc[:,2]
-            a3coloc  = coeffscoloc[:,3]
-            a4coloc  = coeffscoloc[:,4]
+            coeffscoloc = np.linalg.solve(Acoloc, bcoloc[...,None])
+            a0coloc  = coeffscoloc[:,0,0]
+            a1coloc  = coeffscoloc[:,1,0]
+            a2coloc  = coeffscoloc[:,2,0]
+            a3coloc  = coeffscoloc[:,3,0]
+            a4coloc  = coeffscoloc[:,4,0]
         
         else:
             raise ValueError('Inspiral phase version not implemented.')
@@ -424,13 +426,13 @@ class IMRPhenomXAS(WaveFormModel):
             Acoloc = np.array([A0i, A1i, A2i, A3i]).transpose(2,0,1)
             bcoloc = np.array([CollocationValuesPhaseInt0 - ((4. * cLcoloc) / ((2.*fdamp)*(2.*fdamp) + (CollocationPointsPhaseInt0 - fring)*(CollocationPointsPhaseInt0 - fring))), CollocationValuesPhaseInt1 - ((4. * cLcoloc) / ((2.*fdamp)*(2.0*fdamp) + (CollocationPointsPhaseInt1 - fring)*(CollocationPointsPhaseInt1 - fring))), CollocationValuesPhaseInt2 - ((4. * cLcoloc) / ((2.*fdamp)*(2.0*fdamp) + (CollocationPointsPhaseInt2 - fring)*(CollocationPointsPhaseInt2 - fring))), CollocationValuesPhaseInt3 - ((4. * cLcoloc) / ((2.*fdamp)*(2.0*fdamp) + (CollocationPointsPhaseInt3 - fring)*(CollocationPointsPhaseInt3 - fring)))]).T
             
-            coeffscoloc = np.linalg.solve(Acoloc, bcoloc)
+            coeffscoloc = np.linalg.solve(Acoloc, bcoloc[...,None])
 
-            b0coloc = coeffscoloc[:,0]
-            b1coloc = coeffscoloc[:,1] * fring
-            b2coloc = coeffscoloc[:,2] * fring * fring
+            b0coloc = coeffscoloc[:,0,0]
+            b1coloc = coeffscoloc[:,1,0] * fring
+            b2coloc = coeffscoloc[:,2,0] * fring * fring
             b3coloc = np.zeros_like(b2coloc)
-            b4coloc = coeffscoloc[:,3] * fring * fring * fring * fring
+            b4coloc = coeffscoloc[:,3,0] * fring * fring * fring * fring
             
             
         elif self.IntPhaseVersion == 105:
@@ -460,14 +462,14 @@ class IMRPhenomXAS(WaveFormModel):
 
             Acoloc = np.array([A0i, A1i, A2i, A3i, A4i]).transpose(2,0,1)#.T
             bcoloc = np.array([CollocationValuesPhaseInt0 - ((4. * cLcoloc) / ((2.*fdamp)*(2.*fdamp) + (CollocationPointsPhaseInt0 - fring)*(CollocationPointsPhaseInt0 - fring))), CollocationValuesPhaseInt1 - ((4. * cLcoloc) / ((2.*fdamp)*(2.0*fdamp) + (CollocationPointsPhaseInt1 - fring)*(CollocationPointsPhaseInt1 - fring))), CollocationValuesPhaseInt2 - ((4. * cLcoloc) / ((2.*fdamp)*(2.0*fdamp) + (CollocationPointsPhaseInt2 - fring)*(CollocationPointsPhaseInt2 - fring))), CollocationValuesPhaseInt3 - ((4. * cLcoloc) / ((2.*fdamp)*(2.0*fdamp) + (CollocationPointsPhaseInt3 - fring)*(CollocationPointsPhaseInt3 - fring))), CollocationValuesPhaseInt4 - ((4. * cLcoloc) / ((2.*fdamp)*(2.0*fdamp) + (CollocationPointsPhaseInt4 - fring)*(CollocationPointsPhaseInt4 - fring)))]).T
+            #print(bcoloc.shape, bcoloc[...,None].shape)
+            coeffscoloc = np.linalg.solve(Acoloc, bcoloc[...,None])
 
-            coeffscoloc = np.linalg.solve(Acoloc, bcoloc)
-
-            b0coloc = coeffscoloc[:,0]
-            b1coloc = coeffscoloc[:,1] * fring
-            b2coloc = coeffscoloc[:,2] * fring * fring
-            b3coloc = coeffscoloc[:,3] * fring * fring * fring
-            b4coloc = coeffscoloc[:,4] * fring * fring * fring * fring
+            b0coloc = coeffscoloc[:,0, 0]
+            b1coloc = coeffscoloc[:,1, 0] * fring
+            b2coloc = coeffscoloc[:,2, 0] * fring * fring
+            b3coloc = coeffscoloc[:,3, 0] * fring * fring * fring
+            b4coloc = coeffscoloc[:,4, 0] * fring * fring * fring * fring
         
         else:
             raise ValueError('Intermediate phase version not implemented.')
